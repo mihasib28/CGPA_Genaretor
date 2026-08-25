@@ -1,0 +1,128 @@
+private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {                                       
+
+    if (courseInput.getText().equals("") 
+            || creditInput.getText().equals("") 
+            || markInput.getText().equals("")) {
+
+        JOptionPane.showMessageDialog(this, "Please Enter all data!");
+
+    } else {
+
+        try {
+
+            String course = courseInput.getText();
+            double credit = Double.parseDouble(creditInput.getText());
+            double marks = Double.parseDouble(markInput.getText());
+
+            String grade;
+            double point;
+
+            // Calculate Grade and Point
+            if (marks >= 80 && marks <= 100) {
+                grade = "A+";
+                point = 4.00;
+            } 
+            else if (marks >= 75) {
+                grade = "A";
+                point = 3.75;
+            } 
+            else if (marks >= 70) {
+                grade = "A-";
+                point = 3.50;
+            } 
+            else if (marks >= 65) {
+                grade = "B+";
+                point = 3.25;
+            } 
+            else if (marks >= 60) {
+                grade = "B";
+                point = 3.00;
+            } 
+            else if (marks >= 55) {
+                grade = "B-";
+                point = 2.75;
+            } 
+            else if (marks >= 50) {
+                grade = "C+";
+                point = 2.50;
+            } 
+            else if (marks >= 45) {
+                grade = "C";
+                point = 2.25;
+            } 
+            else if (marks >= 40) {
+                grade = "D";
+                point = 2.00;
+            } 
+            else if (marks >= 0) {
+                grade = "F";
+                point = 0.00;
+            } 
+            else {
+                JOptionPane.showMessageDialog(this, "Marks cannot be negative!");
+                return;
+            }
+
+            // Add 5 values to the 5 columns
+            String data[] = {
+                course,
+                String.valueOf(credit),
+                String.valueOf(marks),
+                grade,
+                String.valueOf(point)
+            };
+
+            DefaultTableModel tableModel =
+                    (DefaultTableModel) table.getModel();
+
+            tableModel.addRow(data);
+
+            JOptionPane.showMessageDialog(this, "Add data successfully...");
+
+            // Clear input fields
+            courseInput.setText("");
+            creditInput.setText("");
+            markInput.setText("");
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Credit and Marks must be numbers!"
+            );
+        }
+    }
+}
+
+
+
+private void calculateCGPA() {
+
+    DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+
+    double totalCredits = 0;
+    double totalPoints = 0;
+
+    for (int i = 0; i < tableModel.getRowCount(); i++) {
+
+        double credit = Double.parseDouble(
+                tableModel.getValueAt(i, 1).toString()
+        );
+
+        double point = Double.parseDouble(
+                tableModel.getValueAt(i, 4).toString()
+        );
+
+        totalCredits += credit;
+        totalPoints += credit * point;
+    }
+
+    double cgpa = 0;
+
+    if (totalCredits > 0) {
+        cgpa = totalPoints / totalCredits;
+    }
+
+    jLabel4.setText("Total Credits: " + totalCredits);
+    jLabel5.setText("CGPA: " + String.format("%.2f", cgpa));
+}
